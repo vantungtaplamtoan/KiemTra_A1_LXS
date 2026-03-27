@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Website luyện đề Lý thuyết xác suất</title>
+
+  <link rel="stylesheet" href="./css/style.css" />
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['$$', '$$'], ['\[', '\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+  <div class="app-container">
+
+    <section id="login-screen" class="screen active">
+      <div class="card login-card">
+        <h1>Luyện đề Lý thuyết xác suất</h1>
+        <p class="subtitle">Nhập tài khoản</p>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="student-name">Họ và tên</label>
+            <input type="text" id="student-name" placeholder="Nhập họ và tên" />
+          </div>
+
+          <div class="form-group">
+            <label for="student-id">Mã sinh viên</label>
+            <input type="text" id="student-id" placeholder="Nhập mã sinh viên" maxlength="4" />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Đăng nhập</button>
+        </form>
+
+        <p id="login-error" class="error-text"></p>
+      </div>
+    </section>
+
+    <section id="rules-screen" class="screen hidden">
+      <div class="card rules-card">
+        <h2>Nội quy làm bài</h2>
+
+        <ul class="rules-list">
+          <li>Không được chụp đề.</li>
+          <li>Không được đăng nhập bằng từ 3 thiết bị đối với mỗi tài khoản.</li>
+          <li>Không được chia sẻ đề cho người khác.</li>
+          <li>Không được làm mới trang trong khi đang thi.</li>
+        </ul>
+
+        <div class="candidate-box">
+          <p><strong>Họ tên:</strong> <span id="rules-student-name">---</span></p>
+          <p><strong>Mã sinh viên:</strong> <span id="rules-student-id">---</span></p>
+        </div>
+
+        <button id="start-exam-btn" class="btn btn-primary">Làm bài</button>
+      </div>
+    </section>
+
+    <section id="exam-screen" class="screen hidden">
+  <div class="exam-wrapper exam-layout">
+
+    <div class="exam-main">
+      <div class="exam-header exam-header-centered">
+        <div class="candidate-info candidate-info-strong">
+          <p><strong>Họ tên:</strong> <span id="exam-student-name">---</span></p>
+          <p><strong>Mã sinh viên:</strong> <span id="exam-student-id">---</span></p>
+          <p><strong>Đề hiện tại:</strong> <span id="exam-attempt-number">1</span></p>
+        </div>
+
+        <div class="timer-box timer-box-centered">
+          <span>Thời gian còn lại:</span>
+          <strong id="timer">50:00</strong>
+        </div>
+
+        <div class="exam-header-right"></div>
+      </div>
+
+      <div class="question-area" id="question-area">
+        <div id="watermark-layer" class="watermark-layer"></div>
+
+        <div class="question-content">
+          <div class="question-meta">
+            <span id="current-question-number">Câu 1</span>
+            <span id="current-question-level">Mức độ 1</span>
+          </div>
+
+          <div id="question-text" class="question-text">
+            Nội dung câu hỏi sẽ hiển thị ở đây, ví dụ:
+            $$P(A \cap B) = P(A)P(B)$$
+          </div>
+
+          <div id="options-list" class="options-list"></div>
+        </div>
+      </div>
+
+      <div class="exam-footer">
+        <button id="prev-btn" class="btn btn-secondary">Câu trước</button>
+        <button id="next-btn" class="btn btn-secondary">Câu sau</button>
+        <button id="submit-btn" class="btn btn-danger">Nộp bài</button>
+      </div>
+    </div>
+
+    <aside class="question-nav-panel question-nav-panel-fixed">
+      <h3>Danh sách câu</h3>
+      <div id="question-palette" class="question-palette"></div>
+    </aside>
+
+  </div>
+</section>
+
+    <section id="result-screen" class="screen hidden">
+      <div class="card result-card">
+        <h2>Kết quả bài làm</h2>
+
+        <div class="result-info">
+          <p><strong>Họ tên:</strong> <span id="result-student-name">---</span></p>
+          <p><strong>Mã sinh viên:</strong> <span id="result-student-id">---</span></p>
+          <p><strong>Đề số:</strong> <span id="result-attempt-number">1</span></p>
+          <p><strong>Số câu đúng:</strong> <span id="correct-count">0</span>/<span id="total-question-count">15</span></p>
+          <p><strong>Điểm:</strong> <span id="final-score">0</span></p>
+        </div>
+
+        <div class="result-actions">
+          <button id="review-btn" class="btn btn-primary">Xem lại bài</button>
+          <button id="new-exam-btn" class="btn btn-success">Làm đề mới</button>
+          <button id="logout-btn" class="btn btn-secondary" type="button">Về đăng nhập</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="review-screen" class="screen hidden">
+      <div class="review-wrapper">
+     
+
+        <div class="review-header">
+          <h2>Xem lại bài làm</h2>
+          <div class="candidate-info">
+            <p><strong>Họ tên:</strong> <span id="review-student-name">---</span></p>
+            <p><strong>Mã sinh viên:</strong> <span id="review-student-id">---</span></p>
+            <p><strong>Đề số:</strong> <span id="review-attempt-number">1</span></p>
+          </div>
+        </div>
+
+        <div class="review-layout">
+          <div id="review-list" class="review-list"></div>
+
+          <aside class="review-sidebar">
+            <h3>Đi tới câu</h3>
+            <div id="review-palette" class="review-palette"></div>
+          </aside>
+        </div>
+
+        <div class="review-footer">
+          <button id="review-back-result-btn" class="btn btn-secondary">Quay lại kết quả</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="./js/config.js"></script>
+  <script src="./js/accounts.js"></script>
+  <script src="./js/questions.js"></script>
+  <script src="./js/utils.js"></script>
+  <script src="./js/auth.js"></script>
+  <script src="./js/watermark.js"></script>
+  <script src="./js/latex.js"></script>
+  <script src="./js/rules.js"></script>
+  <script src="./js/exam.js"></script>
+  <script src="./js/result.js"></script>
+  <script src="./js/review.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>
